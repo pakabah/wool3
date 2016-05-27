@@ -30,7 +30,11 @@
         <activity android:name=".views.Crowd" />
         <activity android:name=".views.There" />
         <activity android:name=".views.TerminalRoutes" />
-        <activity android:name=".views.TerminalRoutesDetails"></activity>
+        <activity android:name=".views.TerminalRoutesDetails" />
+
+        <service
+            android:name=".service.DataService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

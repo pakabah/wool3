@@ -1,8 +1,10 @@
 package com.overcoretech.troski;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.overcoretech.troski.service.DataService;
 
 public class Splash extends AppCompatActivity {
 
@@ -10,6 +12,8 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        startService(new Intent(this, DataService.class));
 
         Thread thread = new Thread(){
             @Override

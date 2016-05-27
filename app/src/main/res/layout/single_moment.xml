@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="315dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/terminalCard"
+    card_view:cardCornerRadius="8dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#bcbbbb"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="#ffffff"
+            android:layout_height="250dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/momentpic"
+                android:scaleType="matrix"
+                android:src="@drawable/td1"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/share"
+            android:src="@drawable/share"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/like"
+            android:src="@drawable/hearts_2"
+            android:layout_alignBottom="@+id/share"
+            android:layout_toLeftOf="@+id/share"
+            android:layout_toStartOf="@+id/share" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

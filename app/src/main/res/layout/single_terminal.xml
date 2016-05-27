@@ -26,14 +26,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="37 Station"
+            android:text="Accra Arena Total Zongo Russuia Mataheko Branch of GPRTU"
             android:id="@+id/title"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_below="@+id/headerCol"
+            android:layout_alignBottom="@+id/imageView2"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"

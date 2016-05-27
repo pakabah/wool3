@@ -1,5 +1,6 @@
 package com.overcoretech.troski.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,6 +10,29 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper {
 
+
+    Troski troski;
+
+    public DBHelper(Context context)
+    {
+        troski = new Troski(context);
+    }
+
+    public boolean deleteAllAgencies()
+    {
+        SQLiteDatabase db = troski.getWritableDatabase();
+        db.delete(Troski.TABLE_TERMINALS,null,null);
+        db.close();
+        return true;
+    }
+
+
+    public void insertAgency(String AgencyId, String AgencyName)
+    {
+        SQLiteDatabase db = troski.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+    }
 
     class Troski extends SQLiteOpenHelper
     {
