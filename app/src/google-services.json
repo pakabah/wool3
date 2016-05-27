@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "931901350264",
+    "project_id": "wool3-1324"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931901350264:android:0739fa1f6c6d2453",
+        "android_client_info": {
+          "package_name": "com.overcoretech.troski"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "931901350264-2869ja89a309q2mqr0cu0a0tank9ga7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.overcoretech.troski",
+            "certificate_hash": "16DF1C6F093C99224189E680A7C75C4FAB160499"
+          }
+        },
+        {
+          "client_id": "931901350264-duqjccep15ibcec5kq7mh5qtqbkkcnem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDNx0wxeX4uBmDbcdukg7jt6OFiyWGs1A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
