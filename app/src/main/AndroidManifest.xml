@@ -28,7 +28,9 @@
         <activity android:name=".views.Moments" />
         <activity android:name=".views.Trips" />
         <activity android:name=".views.Crowd" />
-        <activity android:name=".views.There"></activity>
+        <activity android:name=".views.There" />
+        <activity android:name=".views.TerminalRoutes" />
+        <activity android:name=".views.TerminalRoutesDetails"></activity>
     </application>
 
 </manifest>

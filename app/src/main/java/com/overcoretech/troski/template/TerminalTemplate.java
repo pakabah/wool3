@@ -13,4 +13,10 @@ public class TerminalTemplate {
     {
 
     }
+
+    public TerminalTemplate(String TerminalName, String TerminalId)
+    {
+        this.TerminalId = TerminalId;
+        this.TerminalName = TerminalName;
+    }
 }

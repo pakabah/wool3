@@ -1,5 +1,6 @@
 package com.overcoretech.troski.adapter;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.overcoretech.troski.R;
 import com.overcoretech.troski.template.TerminalTemplate;
+import com.overcoretech.troski.views.TerminalRoutes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class TerminalAdapter extends RecyclerView.Adapter<TerminalAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         TerminalTemplate terminalTemplate = terminalTemplates.get(position);
         holder.textView.setText(terminalTemplate.TerminalName);
         holder.textView.setTag(terminalTemplate.TerminalId);
@@ -49,6 +51,9 @@ public class TerminalAdapter extends RecyclerView.Adapter<TerminalAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(v.getContext().getApplicationContext(), TerminalRoutes.class);
+                intent.putExtra("tag", holder.textView.getTag().toString());
+                v.getContext().startActivity(intent);
             }
         });
     }
