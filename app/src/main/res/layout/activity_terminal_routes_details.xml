@@ -84,6 +84,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="2GHC"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="15dp"
                 android:id="@+id/price"
                 android:layout_alignTop="@+id/distance"
                 android:layout_alignParentRight="true"

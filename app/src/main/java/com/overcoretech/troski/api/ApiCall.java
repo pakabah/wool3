@@ -31,6 +31,7 @@ public class ApiCall {
     public static final String DEFAULT = "N/A";
     public static final String ROUTE_DETAILS = "android.intent.action.route_details";
     public static final String ROUTE_FIND = "android.intent.action.route_find";
+    public static final String ROUTE_FAIR = "android.intent.action.route_fair";
 
     public ApiCall(Context context)
     {
@@ -135,7 +136,7 @@ public class ApiCall {
                 super.onPostExecute(s);
                 if(s != null && !s.isEmpty())
                 {
-                    Log.e("Data",s);
+
                     DBHelper dbHelper = new DBHelper(context);
                     dbHelper.deleteAllTerminalROutes();
                     JSONArray jsonArray = null;
@@ -169,10 +170,8 @@ public class ApiCall {
                 String Src = params[0];
                 String Des = params[1];
 
-                Log.e("Call Api", "In Api...");
                 try {
-                    URL url = new URL("http://162.243.96.232/trotro/process/process_request.php?routeSrc="+ Uri.encode(Src)+"&routeDes"+Uri.encode(Des));
-                    Log.e("Call Api", "URL "+ url.toString());
+                    URL url = new URL("http://162.243.96.232/trotro/process/process_request.php?routeSrc="+ Uri.encode(Src)+"&routeDes="+Uri.encode(Des));
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                     connection.setRequestProperty("User-Agent", "");
                     connection.setRequestMethod("GET");
@@ -186,7 +185,6 @@ public class ApiCall {
                     String bufferedStrChunk = null;
 
                     while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
-                        Log.e("Buffer", bufferedStrChunk);
                         stringBuilder.append(bufferedStrChunk);
                     }
                     return stringBuilder.toString();
@@ -199,11 +197,9 @@ public class ApiCall {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                Log.e("Outside s", s);
+                Log.e("Outside",s);
                 if(s != null && !s.isEmpty())
                 {
-                    Log.e("Details Data",s);
-                    Log.e("Call Api", "Done...");
                     JSONArray jsonArray = null;
 
                     try {
@@ -229,6 +225,75 @@ public class ApiCall {
             }
         }
 
+        altgetRouteDetails altgetRouteDetail = new altgetRouteDetails();
+        altgetRouteDetail.execute(from,to);
+    }
+
+    public void getRouteFair(final String from, String to)
+    {
+        class altgetRouteDetails extends AsyncTask<String,Void,String>
+        {
+
+            @Override
+            protected String doInBackground(String... params) {
+                String Src = params[0];
+                String Des = params[1];
+
+                try {
+                    URL url = new URL("http://162.243.96.232/trotro/process/process_request.php?routeSrc="+ Uri.encode(Src)+"&routeDes="+Uri.encode(Des));
+                    HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                    connection.setRequestProperty("User-Agent", "");
+                    connection.setRequestMethod("GET");
+                    connection.setDoInput(true);
+                    connection.connect();
+
+                    InputStream inputStream = connection.getInputStream();
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String bufferedStrChunk = null;
+
+                    while ((bufferedStrChunk = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(bufferedStrChunk);
+                    }
+                    return stringBuilder.toString();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                if(s != null && !s.isEmpty())
+                {
+                    Log.e("Data",s);
+                    JSONArray jsonArray = null;
+
+                    try {
+                        jsonArray = new JSONArray(s);
+                        for(int i=0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String fare =  jsonObject.getString("fare");
+                            String maxTime = jsonObject.getString("maxtime");
+                            String mintime =    jsonObject.getString("mintime");
+                            String src_lon =    jsonObject.getString("src_lat");
+                            String src_lat =  jsonObject.getString("src_lon");
+                            String des_lat =      jsonObject.getString("dest_lat");
+                            String des_lon =    jsonObject.getString("dest_lon");
+
+                            publishRouteFair(fare);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
         altgetRouteDetails altgetRouteDetails = new altgetRouteDetails();
         altgetRouteDetails.execute(from,to);
     }
@@ -244,7 +309,6 @@ public class ApiCall {
                 Query = params[0];
                 try {
                     URL url = new URL("http://162.243.96.232/trotro/process/process_request.php?getStops="+Query);
-                    Log.e("Call Api", "URL "+ url.toString());
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                     connection.setRequestProperty("User-Agent", "");
                     connection.setRequestMethod("GET");
@@ -284,7 +348,6 @@ public class ApiCall {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             if(jsonObject.has("stop_lat_orig"))
                             {
-                                Log.e("Result",jsonObject.getString("stop_name"));
                                 dbHelper.insertDestination(jsonObject.getString("stop_name"),jsonObject.getString("stop_lat_orig"),jsonObject.getString("stop_lon_orig"));
                             }
                         }
@@ -310,7 +373,6 @@ public class ApiCall {
                 Query = params[0];
                 try {
                     URL url = new URL("http://162.243.96.232/trotro/process/process_request.php?getStops="+Query);
-                    Log.e("Call Api", "URL "+ url.toString());
                     HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                     connection.setRequestProperty("User-Agent", "");
                     connection.setRequestMethod("GET");
@@ -350,7 +412,6 @@ public class ApiCall {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             if(jsonObject.has("stop_lat_orig"))
                             {
-                                Log.e("Result",jsonObject.getString("stop_name"));
                                 dbHelper.insertDestination(jsonObject.getString("stop_name"),jsonObject.getString("stop_lat_orig"),jsonObject.getString("stop_lon_orig"));
                             }
                             publishRouteFind(Query);
@@ -404,6 +465,16 @@ public class ApiCall {
         intent.putExtra("dest_lon", dest_longt);
         intent.putExtra("maxtime", maxTime);
         intent.putExtra("mintime", mintime);
+        intent.putExtra("price", price);
+
+        Log.e("Intent Filter", "Register Set");
+        context.sendBroadcast(intent);
+    }
+
+    private void publishRouteFair(String price)
+    {
+        Intent intent = new Intent(ROUTE_FAIR);
+        intent.setAction(ROUTE_FAIR);
         intent.putExtra("price", price);
 
         Log.e("Intent Filter", "Register Set");

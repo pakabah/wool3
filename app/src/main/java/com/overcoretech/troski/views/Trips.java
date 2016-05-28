@@ -14,18 +14,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -61,6 +62,9 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
     String dest_lat,dest_longt,src_longt,src_lat;
     ProgressDialog progress;
 
+    String FromLoc,ToLoc = null;
+    TextView price;
+
 
     public ArrayAdapter<String> adapter;
     public ArrayAdapter<String> adapter1;
@@ -73,35 +77,43 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
         @Override
         public void onReceive(Context context, Intent intent) {
                Bundle bundle = intent.getExtras();
+
             if(bundle!=null)
             {
+                if(ApiCall.ROUTE_FIND.equals(intent.getAction()))
+                {
+                    String search = bundle.getString("Status");
+                    DBHelper dbHelper = new DBHelper(getApplicationContext());
+                    List<Destination> destinations = dbHelper.getDestinationDetails(search);
 
-               String search = bundle.getString("Status");
-                DBHelper dbHelper = new DBHelper(getApplicationContext());
-                List<Destination> destinations = dbHelper.getDestinationDetails(search);
+                    int rowCount = destinations.size();
 
-                int rowCount = destinations.size();
+                    String[] item = new String[rowCount];
+                    int x = 0;
 
-                String[] item = new String[rowCount];
-                int x = 0;
+                    for (Destination records : destinations) {
+                        src_lat = records.lat;
+                        src_longt =  records.lon;
+                        x++;
+                    }
 
-                for (Destination records : destinations) {
-                    Log.e("record",records.name);
-                    Log.e("Lat",records.lat);
-                    Log.e("Long",records.lon);
-                    src_lat = records.lat;
-                    src_longt =  records.lon;
-                    x++;
+                    double src_lat_temp = Double.parseDouble(src_lat);
+                    double src_long_temp = Double.parseDouble(src_longt);
+
+                    Origin = new LatLng(src_lat_temp,src_long_temp);
+                    progress.dismiss();
+                    doStuff();
+                }
+                if(ApiCall.ROUTE_FAIR.equals(intent.getAction()))
+                {
+                    String fair = bundle.getString("price");
+                    String cur = "GHC";
+                    String temp = fair+ cur;
+                    price.setText(temp);
+                    price.setVisibility(View.VISIBLE);
                 }
 
-                Log.e("Src_lat is set at", src_lat);
-                Log.e("Src_lon is set at", src_longt);
-                double src_lat_temp = Double.parseDouble(src_lat);
-                double src_long_temp = Double.parseDouble(src_longt);
 
-                Origin = new LatLng(src_lat_temp,src_long_temp);
-                progress.dismiss();
-                doStuff();
             }
         }
     };
@@ -116,7 +128,11 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         search = (Button) findViewById(R.id.button);
+        price = (TextView) findViewById(R.id.price);
+
         registerReceiver(broadcastReceiver, new IntentFilter(ApiCall.ROUTE_FIND));
+        registerReceiver(broadcastReceiver, new IntentFilter(ApiCall.ROUTE_FAIR));
+
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -136,7 +152,6 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
         }
         else
         {
-
             doStuff();
         }
 
@@ -164,13 +179,17 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
                 progress.show();
 
                 String Start =  customAutoView.getText().toString();
-                Log.e("Start String", Start);
+
 
                 ApiCall apiCall = new ApiCall(getApplicationContext());
                 apiCall.getListFinal(Start);
 
                 String End = editText2.getText().toString();
+                ToLoc = End;
+                FromLoc = Start;
 
+                ApiCall apiCall1 = new ApiCall(getApplicationContext());
+                apiCall1.getRouteFair(FromLoc,ToLoc);
 
                 DBHelper dbHelper1 = new DBHelper(getApplicationContext());
                 List<Destination> destinationsEnd = dbHelper1.getDestinationDetails(End);
@@ -181,16 +200,11 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
                 int i = 0;
 
                 for (Destination record : destinationsEnd) {
-                    Log.e("record",record.name);
-                    Log.e("Lat",record.lat);
-                    Log.e("Long",record.lon);
                     dest_lat = record.lat;
                     dest_longt =  record.lon;
                     i++;
                 }
 
-                Log.e("Dest_lat is set at", dest_lat);
-                Log.e("Dest_lon is set at", dest_longt);
                 double dest_lat_temp   = Double.parseDouble(dest_lat);
                 double dest_lng_temp = Double.parseDouble(dest_longt);
 
@@ -221,7 +235,9 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
             MarkerOptions options = new MarkerOptions();
             assert Origin != null;
             options.position(Origin);
-            options.position(Destination);
+            options
+                    .position(Destination)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker_36));
             googleMap.addMarker(options);
 
             String url = getMapsApiDirectionsUrl(Origin,Destination);
@@ -266,9 +282,10 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
     private void addMarkers(LatLng origin, LatLng destination) {
         if (googleMap != null) {
             googleMap.addMarker(new MarkerOptions().position(origin)
-                    .title("Origin"));
+                    .title(FromLoc));
             googleMap.addMarker(new MarkerOptions().position(destination)
-                    .title("Destination"));
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker_36))
+                    .title(ToLoc));
         }
     }
 
@@ -278,7 +295,6 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
         protected String doInBackground(String... strings) {
             String data = "";
             try {
-                Log.e("URL", strings[0]);
                 HttpConnection http = new HttpConnection();
                 data = http.readUrl(strings[0]);
 
@@ -305,7 +321,6 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
             List<List<HashMap<String, String>>> routes = null;
 
             try {
-                Log.e("Res", jsonData[0]);
                 jObject = new JSONObject(jsonData[0]);
 
                 PathJSONParser parser = new PathJSONParser();
@@ -339,7 +354,7 @@ public class Trips extends AppCompatActivity implements OnMapReadyCallback {
                 }
 
                 polyLineOptions.addAll(points);
-                polyLineOptions.width(3);
+                polyLineOptions.width(4);
                 polyLineOptions.color(Color.BLUE);
             }
 

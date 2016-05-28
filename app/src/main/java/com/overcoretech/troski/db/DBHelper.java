@@ -82,7 +82,7 @@ public class DBHelper {
         contentValues.put(Troski.DESTINATION_LAT,lat);
         contentValues.put(Troski.DESTINATION_LONG,lon);
         contentValues.put(Troski.DESTINATION_NAME,Destination);
-        Log.e("Inserting",Destination);
+
         long mid = db.insert(Troski.TABLE_DESTINATION,null,contentValues);
         db.close();
     }

@@ -69,15 +69,17 @@ public class TerminalRoutesDetails extends AppCompatActivity implements OnMapRea
             if(bundle!=null)
             {
                 progress.dismiss();
-               Price = bundle.getString("price");
+               Price = bundle.getString("price")+ "GHC";
                 minTime = bundle.getString("mintime");
-                maxTime = bundle.getString("maxTIme");
+                maxTime = bundle.getString("maxtime");
                 src_lat = bundle.getString("src_lat");
                 src_longt = bundle.getString("src_lon");
                 dest_lat = bundle.getString("dest_lat");
                 dest_longt = bundle.getString("dest_lon");
 
                 time.setText(getTime(minTime,maxTime));
+
+                price.setText(Price);
 
                  double dest_lat_temp   = Double.parseDouble(dest_lat);
                 double dest_lng_temp = Double.parseDouble(dest_longt);
@@ -112,9 +114,9 @@ public class TerminalRoutesDetails extends AppCompatActivity implements OnMapRea
         }
     };
 
-    public String getTime(String min,String max)
+    public String getTime(String max,String min)
     {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss aa");
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
         Date Date1 = null;
         Date Date2 = null;
         try {
@@ -198,9 +200,9 @@ public class TerminalRoutesDetails extends AppCompatActivity implements OnMapRea
             options.position(Destination);
             googleMap.addMarker(options);
 
-            String url = getMapsApiDirectionsUrl(Origin,Destination);
+//            String url = getMapsApiDirectionsUrl(Origin,Destination);
             ReadTask downloadTask = new ReadTask();
-            downloadTask.execute(url);
+//            downloadTask.execute(url);
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Origin,
                     13));
