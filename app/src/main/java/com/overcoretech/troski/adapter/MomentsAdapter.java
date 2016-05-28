@@ -32,7 +32,21 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        MomentTemplate momentTemplate = momentTemplates.get(position);
+        holder.momentpic.setImageResource(momentTemplate.ImagePath);
+        holder.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Integer.parseInt(holder.like.getTag().toString()) == 1) {
+                    holder.like.setImageResource(R.drawable.hearts_2);
+                    holder.like.setTag(2);
+                } else {
+                    holder.like.setImageResource(R.drawable.hearts);
+                    holder.like.setTag(1);
+                }
+            }
+        });
 
     }
 
@@ -45,10 +59,12 @@ public class MomentsAdapter extends RecyclerView.Adapter<MomentsAdapter.ViewHold
     {
         ImageView like;
         ImageView share;
+        ImageView momentpic;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
+        momentpic = (ImageView) itemView.findViewById(R.id.momentpic);
+            like = (ImageView) itemView.findViewById(R.id.like);
 
         }
     }

@@ -36,7 +36,10 @@ public class Moments extends AppCompatActivity {
     {
         List<MomentTemplate> momentTemplates = new ArrayList<>();
 
-        momentTemplates.add(new MomentTemplate());
+        momentTemplates.add(new MomentTemplate(R.drawable.tro));
+        momentTemplates.add(new MomentTemplate(R.drawable.tro1));
+        momentTemplates.add(new MomentTemplate(R.drawable.tro2));
+        momentTemplates.add(new MomentTemplate(R.drawable.tro3));
 
         return momentTemplates;
     }

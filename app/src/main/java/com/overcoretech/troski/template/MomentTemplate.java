@@ -7,6 +7,11 @@ public class MomentTemplate {
     public String MomentId;
     public int ImagePath;
 
+    public MomentTemplate(int ImagePath)
+    {
+        this.ImagePath = ImagePath;
+    }
+
 
 
 }
