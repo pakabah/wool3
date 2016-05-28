@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.Context;
 
 import com.overcoretech.troski.api.ApiCall;
+import com.overcoretech.troski.db.DBHelper;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -71,9 +72,10 @@ public class DataService extends IntentService {
                 handleActionBaz(param1, param2);
             }
         }
-
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+        dbHelper.deleteAllAgencies();
         ApiCall apiCall = new ApiCall(getApplicationContext());
-        apiCall.getTerminal();
+         apiCall.getTerminal();
     }
 
     /**

@@ -10,9 +10,9 @@ import android.view.MenuItem;
 
 import com.overcoretech.troski.R;
 import com.overcoretech.troski.adapter.TerminalAdapter;
+import com.overcoretech.troski.db.DBHelper;
 import com.overcoretech.troski.template.TerminalTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Terminals extends AppCompatActivity {
@@ -34,11 +34,12 @@ public class Terminals extends AppCompatActivity {
 
     public List<TerminalTemplate> initializeData()
     {
-        List<TerminalTemplate> terminalTemplates = new ArrayList<>();
-        terminalTemplates.add(new TerminalTemplate("37 Station","37"));
-        terminalTemplates.add(new TerminalTemplate("Kaneshie Station", "KS"));
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+//        List<TerminalTemplate> terminalTemplates = new ArrayList<>();
+//        terminalTemplates.add(new TerminalTemplate("37 Station","37"));
+//        terminalTemplates.add(new TerminalTemplate("Kaneshie Station", "KS"));
 
-        return terminalTemplates;
+        return dbHelper.getAllTerminals();
     }
 
     private void initToolbar(String title) {

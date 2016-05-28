@@ -8,6 +8,7 @@ public class TerminalRoutesTemplate {
    public String RouteId;
    public String Distance;
    public String Price;
+    public String RouteTo;
 
 
     public TerminalRoutesTemplate()

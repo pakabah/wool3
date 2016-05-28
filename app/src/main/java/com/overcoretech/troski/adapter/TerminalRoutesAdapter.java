@@ -39,11 +39,14 @@ public class TerminalRoutesAdapter extends RecyclerView.Adapter<TerminalRoutesAd
         TerminalRoutesTemplate terminalRoutesTemplate = terminalRoutesTemplates.get(position);
         holder.name.setText(terminalRoutesTemplate.RouteName);
         holder.name.setTag(terminalRoutesTemplate.RouteId);
+        holder.routeTo.setText(terminalRoutesTemplate.RouteTo);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext().getApplicationContext(), TerminalRoutesDetails.class);
                 intent.putExtra("tag", holder.name.getTag().toString());
+                intent.putExtra("nameF",holder.name.getText().toString() );
+                intent.putExtra("nameS", holder.routeTo.getText().toString());
                 v.getContext().startActivity(intent);
             }
         });
@@ -59,11 +62,13 @@ public class TerminalRoutesAdapter extends RecyclerView.Adapter<TerminalRoutesAd
 
         CardView cardView;
         TextView name;
+        TextView routeTo;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.route);
+            name = (TextView) itemView.findViewById(R.id.routeFrom);
             cardView = (CardView) itemView.findViewById(R.id.terminalCard);
+            routeTo = (TextView) itemView.findViewById(R.id.routeTo);
         }
     }
 }

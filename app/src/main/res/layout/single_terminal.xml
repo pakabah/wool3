@@ -37,7 +37,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="#49b2c2"
+            android:background="#5e6161"
             android:id="@+id/headerCol"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
